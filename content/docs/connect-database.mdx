@@ -1,0 +1,67 @@
+
+
+## 连接数据库
+
+创建数据库后，您需要连接 SQLPub 的 Serverless MySQL 实例才能开始操作。
+
+### 步骤 1：获取连接信息
+
+1. 登录 SQLPub 平台。
+2. 打开 **数据库管理** 页面。
+3. 点击您要连接的数据库实例。
+4. 查看数据库详情页的连接信息，包括：
+   - 主机地址（Host）
+   - 端口号（Port）
+   - 用户名（User）
+   - 密码（Password）
+   - 数据库名称（Database）
+
+### 步骤 2：选择客户端
+
+您可以使用以下 MySQL 客户端进行连接：
+
+- **命令行**（MySQL CLI）：
+  ```bash
+  mysql -h <host> -P <port> -u <user> -p<password> <database>
+  ```
+- **图形化客户端**：
+  - MySQL Workbench
+  - DBeaver
+  - Navicat
+
+### 步骤 3：连接数据库
+
+1. 打开客户端并填写从 SQLPub 获取的连接信息。
+2. 点击 **连接** 或执行命令行连接。
+3. 确认连接成功后，即可执行 SQL 查询。
+
+### 注意事项
+
+- 确保您的网络能够访问数据库所在的区域。
+- 不要将密码泄露给无关人员。
+- Serverless 模式下，数据库会根据负载动态分配资源，连接时请合理设置客户端超时时间。
+- 对于应用程序连接，请使用连接池提高性能。
+
+### 示例：命令行连接
+
+```bash
+mysql -h sqlpub-example.mysql.database.cloud -P 3306 -u admin -p mydatabase
+```
+
+连接成功后，可以执行 SQL 操作：
+
+```sql
+CREATE TABLE users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50),
+  email VARCHAR(100)
+);
+
+INSERT INTO users (name, email) VALUES ('张三', 'zhangsan@example.com');
+
+SELECT * FROM users;
+```
+
+### 小结
+
+通过以上步骤，您可以顺利连接 SQLPub 的 Serverless MySQL 数据库，并开始创建表和执行查询。

@@ -1,0 +1,129 @@
+
+
+## SQLPub API 使用指南
+
+SQLPub 提供丰富的 API 接口，方便开发者程序化管理数据库实例、执行操作以及监控资源。
+
+### 认证
+
+所有 API 请求都需要使用 API Key 进行认证。
+在请求头中添加：
+
+```http
+Authorization: Bearer <your_api_key>
+Content-Type: application/json
+```
+
+### 基础 URL
+
+```
+https://api.sqlpub.com/v1
+```
+
+### 常用 API 接口
+
+#### 1. 获取数据库列表
+
+- **方法**：GET
+- **接口**：`/databases`
+- **示例请求**：
+
+```bash
+curl -X GET "https://api.sqlpub.com/v1/databases" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+- **示例响应**：
+
+```json
+[
+  {
+    "id": "db_123456",
+    "name": "example_db",
+    "status": "running",
+    "created_at": "2025-11-22T08:30:00Z"
+  }
+]
+```
+
+#### 2. 创建数据库
+
+- **方法**：POST
+- **接口**：`/databases`
+- **示例请求**：
+
+```bash
+curl -X POST "https://api.sqlpub.com/v1/databases" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "my_new_db",
+        "region": "ap-southeast-1",
+        "version": "8.0"
+      }'
+```
+
+- **示例响应**：
+
+```json
+{
+  "id": "db_654321",
+  "name": "my_new_db",
+  "status": "creating",
+  "created_at": "2025-11-22T09:00:00Z"
+}
+```
+
+#### 3. 删除数据库
+
+- **方法**：DELETE
+- **接口**：`/databases/{id}`
+- **示例请求**：
+
+```bash
+curl -X DELETE "https://api.sqlpub.com/v1/databases/db_654321" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+- **示例响应**：
+
+```json
+{
+  "message": "Database deleted successfully."
+}
+```
+
+#### 4. 获取数据库详情
+
+- **方法**：GET
+- **接口**：`/databases/{id}`
+- **示例请求**：
+
+```bash
+curl -X GET "https://api.sqlpub.com/v1/databases/db_123456" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+- **示例响应**：
+
+```json
+{
+  "id": "db_123456",
+  "name": "example_db",
+  "status": "running",
+  "region": "ap-southeast-1",
+  "version": "8.0",
+  "created_at": "2025-11-22T08:30:00Z"
+}
+```
+
+### 注意事项
+
+- API Key 请妥善保管，不要泄露。
+- 所有请求返回的时间为 UTC。
+- 建议使用 SDK 或官方客户端封装 API 调用，减少出错。
+- 对于高频请求，请合理控制速率，避免触发限流。
+
+### 小结
+
+通过 SQLPub API，开发者可以轻松实现数据库实例的创建、管理和监控，支持自动化运维与快速部署。
