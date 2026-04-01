@@ -1,8 +1,9 @@
-// app/contact-sales/page.tsx
 "use client";
 
 import { useState } from "react";
-import { button as buttonStyles } from "@heroui/theme";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ContactSales() {
   const [name, setName] = useState("");
@@ -13,7 +14,6 @@ export default function ContactSales() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 这里可以调用你的后端 API 提交表单
     try {
       await fetch("/api/contact-sales", {
         method: "POST",
@@ -31,7 +31,7 @@ export default function ContactSales() {
     return (
       <section className="flex flex-col items-center justify-center py-16">
         <h1 className="text-3xl font-bold mb-4">感谢您的联系！</h1>
-        <p>我们会尽快与您取得联系。</p>
+        <p className="text-muted-foreground">我们会尽快与您取得联系。</p>
       </section>
     );
   }
@@ -39,33 +39,30 @@ export default function ContactSales() {
   return (
     <section className="max-w-2xl mx-auto py-16 px-4">
       <h1 className="text-4xl font-bold mb-6 text-center">联系我们</h1>
-      <p className="mb-8 text-center text-gray-600">
+      <p className="mb-8 text-center text-muted-foreground">
         请填写下方信息，我们会尽快与您联系。
       </p>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <input
+        <Input
           type="text"
           placeholder="姓名"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
-        <input
+        <Input
           type="email"
           placeholder="邮箱"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
-        <input
+        <Input
           type="text"
           placeholder="公司"
           value={company}
           onChange={(e) => setCompany(e.target.value)}
           required
-          className="px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
         <textarea
           placeholder="您的需求或问题"
@@ -73,14 +70,11 @@ export default function ContactSales() {
           onChange={(e) => setMessage(e.target.value)}
           rows={4}
           required
-          className="px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         />
-        <button
-          type="submit"
-          className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-        >
+        <Button type="submit" size="lg" radius="full">
           提交
-        </button>
+        </Button>
       </form>
     </section>
   );

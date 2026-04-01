@@ -1,8 +1,8 @@
-import { Card } from "@heroui/card";
-
-import BlogLayout from "./layout";
+import Link from "next/link";
 
 import { title } from "@/components/primitives";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const posts = [
   {
@@ -27,26 +27,23 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <BlogLayout>
-      <h1 className={title()}>博客</h1>
+    <div>
+      <h1 className={cn(title(), "text-center")}>博客</h1>
       <div className="mt-8 flex flex-col gap-6">
         {posts.map((post) => (
-          <Card
-            key={post.slug}
-            as="a"
-            className="block p-6 rounded-xl shadow hover:shadow-lg transition hover:scale-105 transform"
-            href={`/blog/${post.slug}`}
-          >
-            <h2 className="text-xl font-bold mb-2">{post.title}</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              {post.date}
-            </p>
-            <p className="text-gray-700 dark:text-gray-300">
-              {post.description}
-            </p>
-          </Card>
+          <Link key={post.slug} href={`/blog/${post.slug}`}>
+            <Card className="block p-6 rounded-xl shadow hover:shadow-lg transition hover:scale-[1.02] transform cursor-pointer">
+              <h2 className="text-xl font-bold mb-2">{post.title}</h2>
+              <p className="text-sm text-muted-foreground mb-2">
+                {post.date}
+              </p>
+              <p className="text-muted-foreground">
+                {post.description}
+              </p>
+            </Card>
+          </Link>
         ))}
       </div>
-    </BlogLayout>
+    </div>
   );
 }
