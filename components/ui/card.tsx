@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border border-border bg-card text-card-foreground shadow-sm",
+      "rounded-xl border border-border bg-card text-card-foreground transition-all duration-300",
       className
     )}
     {...props}
@@ -76,4 +76,24 @@ const CardFooter = React.forwardRef<
 ));
 CardFooter.displayName = "CardFooter";
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
+// Neon style card with gradient border
+const NeonCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { glowOnHover?: boolean }
+>(({ className, glowOnHover = false, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "relative rounded-xl bg-card text-card-foreground overflow-hidden",
+      "before:absolute before:inset-0 before:rounded-xl before:p-[1px]",
+      "before:bg-gradient-to-br before:from-primary/40 before:via-transparent before:to-primary/10",
+      "before:-z-10 before:content-['']",
+      glowOnHover && "hover:shadow-[0_0_30px_hsl(160_84%_39%/0.2)] transition-shadow duration-300",
+      className
+    )}
+    {...props}
+  />
+));
+NeonCard.displayName = "NeonCard";
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, NeonCard };
