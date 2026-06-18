@@ -57,3 +57,51 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Syntax highlighting (rehype-highlight / highlight.js tokens) */
+@layer components {
+  .prose pre {
+    @apply rounded-lg border border-border bg-muted/60 text-foreground;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0 text-sm font-normal;
+  }
+  .prose :not(pre) > code {
+    @apply rounded bg-muted px-1.5 py-0.5 text-sm font-medium text-foreground before:content-none after:content-none;
+  }
+
+  .hljs-comment,
+  .hljs-quote {
+    @apply text-muted-foreground italic;
+  }
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-section,
+  .hljs-doctag,
+  .hljs-type,
+  .hljs-name,
+  .hljs-strong {
+    @apply text-primary;
+  }
+  .hljs-string,
+  .hljs-attr,
+  .hljs-template-tag,
+  .hljs-addition {
+    color: hsl(35 95% 55%);
+  }
+  .hljs-number,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-meta {
+    color: hsl(210 90% 62%);
+  }
+  .hljs-title,
+  .hljs-built_in,
+  .hljs-function .hljs-title {
+    color: hsl(280 65% 70%);
+  }
+  .hljs-deletion {
+    @apply text-destructive;
+  }
+}
