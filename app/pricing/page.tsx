@@ -10,12 +10,6 @@ type Feature = {
   tip?: string;
 };
 
-type Meter = {
-  label: string;
-  price: string;
-  note: string;
-};
-
 type Plan = {
   name: string;
   price: string;
@@ -25,7 +19,6 @@ type Plan = {
   cta: string;
   variant: "outline" | "default";
   featured?: boolean;
-  meters?: Meter[];
 };
 
 const plans: Plan[] = [
