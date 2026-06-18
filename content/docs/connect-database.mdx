@@ -2,53 +2,59 @@
 
 ## 连接数据库
 
-创建数据库后，您需要连接 SQLPub 的 Serverless MySQL 实例才能开始操作。
+创建数据库后，可通过控制台一键连接 Web SQL 客户端，或使用标准 MySQL 工具连接。
 
-### 步骤 1：获取连接信息
+### 方式一：Web SQL 客户端（推荐）
 
-1. 登录 SQLPub 平台。
-2. 打开 **数据库管理** 页面。
-3. 点击您要连接的数据库实例。
-4. 查看数据库详情页的连接信息，包括：
+适用于 **共享实例** 中的 schema：
+
+1. 进入 **共享实例** 或数据库 **详情页**。
+2. 点击 **连接数据库**。
+3. 系统通过 SSO 自动跳转至 [Web SQL 客户端](https://client.sqlpub.com)，无需手动输入密码。
+
+详见 [Web SQL 客户端](/docs/web-client)。
+
+### 方式二：MySQL 客户端
+
+适用于共享 schema 与 Serverless 独享实例：
+
+1. 在控制台 **详情页** 获取连接信息：
    - 主机地址（Host）
-   - 端口号（Port）
+   - 端口（Port）
    - 用户名（User）
    - 密码（Password）
    - 数据库名称（Database）
+2. 使用命令行或图形化工具连接：
 
-### 步骤 2：选择客户端
+```bash
+mysql -h <host> -P <port> -u <user> -p<password> <database>
+```
 
-您可以使用以下 MySQL 客户端进行连接：
+支持 MySQL Workbench、DBeaver、Navicat 等。
 
-- **命令行**（MySQL CLI）：
-  ```bash
-  mysql -h <host> -P <port> -u <user> -p<password> <database>
-  ```
-- **图形化客户端**：
-  - MySQL Workbench
-  - DBeaver
-  - Navicat
+各语言驱动连接示例请参阅 [驱动连接教程](/docs/driver-connect)（Node.js、Python、Java、Go 等）。
 
-### 步骤 3：连接数据库
+### 方式三：REST API
 
-1. 打开客户端并填写从 SQLPub 获取的连接信息。
-2. 点击 **连接** 或执行命令行连接。
-3. 确认连接成功后，即可执行 SQL 查询。
+在 **个人中心 → 密钥管理** 创建 API Key 后，通过 API 执行查询：
+
+```bash
+curl -X POST "https://api.sqlpub.com/api/v1/databases/{database_name}/query" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"sql": "SELECT 1"}'
+```
+
+详见 [API 文档](/docs/api)。
 
 ### 注意事项
 
-- 确保您的网络能够访问数据库所在的区域。
-- 不要将密码泄露给无关人员。
-- Serverless 模式下，数据库会根据负载动态分配资源，连接时请合理设置客户端超时时间。
-- 对于应用程序连接，请使用连接池提高性能。
+- 免费版与开发版连接共享实例上的 schema；Serverless 连接独享实例。
+- Serverless 缩容至零后，首次连接可能需要数秒冷启动，请设置合理超时。
+- 详情页提供 **释放连接数** 功能，可一键释放所有活跃连接。
+- 应用连接建议使用连接池。
 
-### 示例：命令行连接
-
-```bash
-mysql -h sqlpub-example.mysql.database.cloud -P 3306 -u admin -p mydatabase
-```
-
-连接成功后，可以执行 SQL 操作：
+### 示例
 
 ```sql
 CREATE TABLE users (
@@ -61,7 +67,3 @@ INSERT INTO users (name, email) VALUES ('张三', 'zhangsan@example.com');
 
 SELECT * FROM users;
 ```
-
-### 小结
-
-通过以上步骤，您可以顺利连接 SQLPub 的 Serverless MySQL 数据库，并开始创建表和执行查询。

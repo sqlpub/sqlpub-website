@@ -3,6 +3,7 @@ import { Check, Info } from "lucide-react";
 import { title, subtitle } from "@/components/primitives";
 import { Button } from "@/components/ui/button";
 import { SimpleTooltip } from "@/components/ui/tooltip";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 type Feature = {
@@ -37,8 +38,8 @@ const plans: Plan[] = [
     cta: "开始使用",
     variant: "outline",
     features: [
-      { text: "1 个数据库", tip: "schema" },
-      { text: "0.5GB 存储空间", tip: "超出锁定，可升级到开发版" },
+      { text: "共享实例", tip: "申请获得 1 个独立 schema" },
+      { text: "0.5GB 存储空间", tip: "超出锁定，升级开发版自动解锁" },
       { text: "30 个连接" },
       { text: "3.6万次请求 / 小时" },
       { text: "5G 公网流量 / 月" },
@@ -50,30 +51,45 @@ const plans: Plan[] = [
     period: "/ 年",
     description: "性价比之选，适合个人开发者长期使用",
     cta: "立即购买",
-    variant: "outline",
+    variant: "default",
+    featured: true,
     features: [
-      { text: "1 个数据库", tip: "schema" },
-      { text: "1GB 存储空间", tip: "超出 0.35元/GB/月" },
+      { text: "共享实例", tip: "申请获得 1 个独立 schema" },
+      { text: "1GB 存储空间", tip: "超出 0.35元/GB/月，需保持余额充足" },
       { text: "50 个连接" },
       { text: "7.2万次请求 / 小时" },
       { text: "10G 公网流量", tip: "超出 0.7元/GB (当前免费)" },
-      { text: "专属共享服务器", tip: "稳定性和性能优于免费版" },
+      { text: "优质共享资源池", tip: "稳定性和性能优于免费版" },
       { text: "自动备份", tip: "1次 / 天，保留3个" },
     ],
   },
   {
     name: "Serverless 版",
-    price: "¥9.9",
-    period: "/ 月",
-    description: "生产级弹性伸缩，按需自动扩缩容",
+    price: "按量付费",
+    period: "",
+    description: "生产级弹性伸缩，用多少付多少",
     cta: "去体验",
-    variant: "default",
-    featured: true,
+    variant: "outline",
+    meters: [
+      {
+        label: "计算费用",
+        price: "0.045元 / CU / 小时",
+        note: "自动伸缩按秒计费",
+      },
+      {
+        label: "存储费用",
+        price: "0.5元 / GB / 月",
+        note: "按实际使用",
+      },
+      {
+        label: "流量费用",
+        price: "0.5元 / GB",
+        note: "50GB 免费/月，当前免费",
+      },
+    ],
     features: [
-      { text: "1 个完整版实例", tip: "没有数据库个数限制" },
-      { text: "5GB 存储空间", tip: "超出 0.5元/GB/月" },
+      { text: "独享实例", tip: "独立 MySQL 实例，无数据库个数限制" },
       { text: "最大 3000 个连接" },
-      { text: "10G 公网流量 / 月", tip: "超出 0.7元/GB (当前免费)" },
       { text: "自动扩展至 2CU", tip: "2 个 vCPU，8 GB RAM" },
       { text: "2 小时不使用自动缩放到 0" },
       { text: "私有网络 / IP 限制", tip: "后续支持" },
@@ -123,14 +139,41 @@ export default function PricingPage() {
                 {plan.description}
               </p>
               <div className="mt-4 flex items-end gap-1">
-                <span className="text-4xl font-extrabold tracking-tight text-foreground">
+                <span
+                  className={cn(
+                    "font-extrabold tracking-tight text-foreground",
+                    plan.meters ? "text-2xl" : "text-4xl"
+                  )}
+                >
                   {plan.price}
                 </span>
-                <span className="pb-1 text-sm text-muted-foreground">
-                  {plan.period}
-                </span>
+                {plan.period && (
+                  <span className="pb-1 text-sm text-muted-foreground">
+                    {plan.period}
+                  </span>
+                )}
               </div>
             </div>
+
+            {plan.meters && (
+              <div className="mb-6 space-y-4 border-y border-border py-4">
+                {plan.meters.map((meter) => (
+                  <div key={meter.label}>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="text-sm font-medium text-foreground">
+                        {meter.label}
+                      </span>
+                      <span className="text-right text-sm font-semibold text-foreground">
+                        {meter.price}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {meter.note}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <ul className="mb-8 flex-1 space-y-3 text-sm">
               {plan.features.map((feature) => (
@@ -152,8 +195,9 @@ export default function PricingPage() {
               variant={plan.variant}
               className="w-full"
               radius="lg"
+              asChild
             >
-              {plan.cta}
+              <a href={siteConfig.links.login}>{plan.cta}</a>
             </Button>
           </div>
         ))}

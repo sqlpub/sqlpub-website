@@ -76,7 +76,7 @@ export default function Home() {
         <div className="max-w-3xl">
           <h1 className="text-balance">
             <span className={cn(title({ size: "lg" }))}>免费的&nbsp;</span>
-            <span className={cn(title({ color: "green", size: "lg" }))}>
+            <span className={cn(title({ color: "mysql", size: "lg" }))}>
               MySQL&nbsp;
             </span>
             <br />

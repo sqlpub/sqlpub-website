@@ -1,0 +1,288 @@
+## 驱动连接教程
+
+SQLPub 兼容标准 MySQL 协议，可使用各语言官方或社区驱动连接。连接信息在控制台 **详情页** 获取（共享实例或 Serverless 实例）。
+
+### 连接参数
+
+将以下占位符替换为控制台中的实际值：
+
+| 参数 | 说明 | 示例 |
+| --- | --- | --- |
+| `host` | 公网主机地址 | `xxx.sqlpub.com` |
+| `port` | 端口 | `3306` |
+| `user` | 数据库用户名 | `my_user` |
+| `password` | 数据库密码 | `your_password` |
+| `database` | 数据库名称（schema） | `my_db` |
+
+建议通过环境变量管理凭证，不要硬编码在代码中：
+
+```bash
+export DB_HOST=xxx.sqlpub.com
+export DB_PORT=3306
+export DB_USER=my_user
+export DB_PASSWORD=your_password
+export DB_NAME=my_db
+```
+
+### Node.js
+
+推荐使用 [mysql2](https://github.com/sidorares/node-mysql2)。
+
+**安装：**
+
+```bash
+npm install mysql2
+```
+
+**基础连接：**
+
+```javascript
+const mysql = require("mysql2/promise");
+
+async function main() {
+  const connection = await mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT || 3306),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  });
+
+  const [rows] = await connection.execute("SELECT 1 AS ok");
+  console.log(rows);
+
+  await connection.end();
+}
+
+main().catch(console.error);
+```
+
+**连接池（生产环境推荐）：**
+
+```javascript
+const mysql = require("mysql2/promise");
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT || 3306),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+});
+
+async function query(sql, params = []) {
+  const [rows] = await pool.execute(sql, params);
+  return rows;
+}
+```
+
+### Python
+
+推荐使用 [PyMySQL](https://github.com/PyMySQL/PyMySQL) 或 [mysql-connector-python](https://dev.mysql.com/doc/connector-python/en/)。以下示例使用 PyMySQL。
+
+**安装：**
+
+```bash
+pip install pymysql
+```
+
+**基础连接：**
+
+```python
+import os
+import pymysql
+
+connection = pymysql.connect(
+    host=os.environ["DB_HOST"],
+    port=int(os.environ.get("DB_PORT", 3306)),
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DB_NAME"],
+    charset="utf8mb4",
+    cursorclass=pymysql.cursors.DictCursor,
+)
+
+try:
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT 1 AS ok")
+        print(cursor.fetchone())
+finally:
+    connection.close()
+```
+
+**使用上下文管理器：**
+
+```python
+import os
+import pymysql
+
+def get_connection():
+    return pymysql.connect(
+        host=os.environ["DB_HOST"],
+        port=int(os.environ.get("DB_PORT", 3306)),
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ["DB_NAME"],
+        charset="utf8mb4",
+        autocommit=True,
+    )
+
+with get_connection() as conn:
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT VERSION()")
+        print(cursor.fetchone())
+```
+
+### Java
+
+使用 MySQL 官方 JDBC 驱动 [mysql-connector-j](https://dev.mysql.com/doc/connector-j/en/)。
+
+**Maven 依赖：**
+
+```xml
+<dependency>
+  <groupId>com.mysql</groupId>
+  <artifactId>mysql-connector-j</artifactId>
+  <version>9.2.0</version>
+</dependency>
+```
+
+**Gradle 依赖：**
+
+```gradle
+implementation "com.mysql:mysql-connector-j:9.2.0"
+```
+
+**基础连接：**
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class SqlPubExample {
+  public static void main(String[] args) throws Exception {
+    String host = System.getenv("DB_HOST");
+    String port = System.getenv().getOrDefault("DB_PORT", "3306");
+    String user = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASSWORD");
+    String database = System.getenv("DB_NAME");
+
+    String url = String.format(
+      "jdbc:mysql://%s:%s/%s?useSSL=true&serverTimezone=UTC&characterEncoding=utf8",
+      host, port, database
+    );
+
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery("SELECT 1 AS ok")) {
+      if (rs.next()) {
+        System.out.println(rs.getInt("ok"));
+      }
+    }
+  }
+}
+```
+
+**Spring Boot 配置（`application.yml`）：**
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME}?useSSL=true&serverTimezone=UTC&characterEncoding=utf8
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+```
+
+### Go
+
+使用社区驱动 [go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)。
+
+**安装：**
+
+```bash
+go get github.com/go-sql-driver/mysql
+```
+
+**基础连接：**
+
+```go
+package main
+
+import (
+	"database/sql"
+	"fmt"
+	"os"
+
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func main() {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=UTC",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		envOrDefault("DB_PORT", "3306"),
+		os.Getenv("DB_NAME"),
+	)
+
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	if err := db.Ping(); err != nil {
+		panic(err)
+	}
+
+	var ok int
+	if err := db.QueryRow("SELECT 1").Scan(&ok); err != nil {
+		panic(err)
+	}
+	fmt.Println(ok)
+}
+
+func envOrDefault(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
+}
+```
+
+**连接池配置：**
+
+```go
+db.SetMaxOpenConns(10)
+db.SetMaxIdleConns(5)
+db.SetConnMaxLifetime(0)
+```
+
+### 其他常用工具
+
+| 工具 | 连接方式 |
+| --- | --- |
+| MySQL CLI | `mysql -h <host> -P <port> -u <user> -p<password> <database>` |
+| MySQL Workbench | 新建连接，填写 Host / Port / Username / Password |
+| DBeaver / Navicat | 选择 MySQL，填写同上参数 |
+| Prisma（Node.js） | `DATABASE_URL="mysql://user:password@host:port/database"` |
+
+### 注意事项
+
+- **共享实例**（免费版 / 开发版）与 **Serverless 独享实例** 均使用标准 MySQL 协议，驱动配置方式相同。
+- 免费版并发连接上限 30，开发版 50，Serverless 最大 3000；应用请使用连接池并控制连接数。
+- Serverless 实例缩容至零后，首次连接可能需要数秒冷启动，请设置合理连接与查询超时。
+- 密码含特殊字符时，请按驱动要求转义（如 JDBC URL、DSN 中的 `@`、`:` 等）。
+- 生产环境建议将凭证存入密钥管理服务或 CI 环境变量，勿提交到代码仓库。
+
+### 相关文档
+
+- [连接数据库](/docs/connect-database)
+- [共享实例](/docs/user-db)
+- [Serverless 实例](/docs/serverless-instance)
+- [API 文档](/docs/api)

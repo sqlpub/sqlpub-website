@@ -25,8 +25,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#016FEE" },
+    { media: "(prefers-color-scheme: dark)", color: "#016FEE" },
   ],
 };
 
@@ -52,49 +52,49 @@ export default function RootLayout({
               {children}
             </main>
             <footer className="w-full border-t border-border mt-8">
-              <div className="container mx-auto max-w-7xl px-6 py-10 flex flex-col gap-8 md:flex-row md:justify-between">
-                <div className="flex flex-col gap-3 flex-grow justify-between min-h-full">
-                  <div>
+              <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
+                <div className="flex flex-col gap-10 md:flex-row md:justify-between md:gap-8">
+                  <div className="flex flex-col gap-6 md:max-w-xs md:justify-between">
                     <Link
-                      className="flex justify-start items-center gap-1"
+                      className="flex w-fit items-center gap-1.5"
                       href="/"
                     >
                       <Logo />
-                      <p className="font-bold text-inherit">SQLPUB</p>
+                      <span className="font-bold text-inherit">SQLPUB</span>
                     </Link>
-                  </div>
-                  <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-3">
-                      <Link
-                        className="text-muted-foreground hover:text-primary flex items-center gap-1"
-                        href="https://beian.miit.gov.cn"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        浙ICP备2021006423号-1
-                      </Link>
-                      <Link
-                        className="text-muted-foreground hover:text-primary flex items-center gap-1"
-                        href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011631"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Image
-                          alt="beianLogo"
-                          height={14}
-                          src="/beian.png"
-                          width={14}
-                        />
-                        浙公网安备 33010602011631号
-                      </Link>
+                    <div className="flex flex-col gap-2 text-xs text-muted-foreground">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1">
+                        <Link
+                          className="w-fit text-muted-foreground hover:text-primary"
+                          href="https://beian.miit.gov.cn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          浙ICP备2021006423号-1
+                        </Link>
+                        <Link
+                          className="flex w-fit items-center gap-1 text-muted-foreground hover:text-primary"
+                          href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011631"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Image
+                            alt="beianLogo"
+                            height={14}
+                            src="/beian.png"
+                            width={14}
+                          />
+                          浙公网安备 33010602011631号
+                        </Link>
+                      </div>
+                      <p>
+                        © 2021-{new Date().getFullYear()} SQLPub Team. All
+                        rights reserved.
+                      </p>
                     </div>
-                    <div>
-                      © 2021-{new Date().getFullYear()} SQLPub Team. All rights
-                      reserved.
-                    </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-24 md:grid-cols-4">
+
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:gap-x-10 md:grid-cols-4 md:gap-x-12 lg:gap-x-16">
                   <div className="flex flex-col gap-2">
                     <h4 className="text-sm font-semibold">联系我们</h4>
                     <Link
@@ -173,6 +173,7 @@ export default function RootLayout({
                     >
                       数据同步组件
                     </Link>
+                  </div>
                   </div>
                 </div>
               </div>

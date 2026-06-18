@@ -9,9 +9,10 @@ export const title = cva(
         yellow: "bg-clip-text text-transparent bg-gradient-to-b from-[#FF705B] to-[#FFB457]",
         blue: "bg-clip-text text-transparent bg-gradient-to-b from-[#5EA2EF] to-[#0072F5]",
         cyan: "bg-clip-text text-transparent bg-gradient-to-b from-[#00b7fa] to-[#01cfea]",
-        green: "bg-clip-text text-transparent bg-gradient-to-b from-[#00E599] to-[#00b377]",
+        green: "bg-clip-text text-transparent bg-gradient-to-r from-[#016FEE] to-[#3d8ef5]",
+        mysql: "bg-clip-text text-transparent bg-gradient-to-r from-[#00deb9] via-[#03b2de] to-[#8e03ff]",
         pink: "bg-clip-text text-transparent bg-gradient-to-b from-[#FF72E1] to-[#F54C7A]",
-        logo: "bg-clip-text text-transparent bg-gradient-to-r from-[#00E599] via-[#00d4c8] to-[#00b377]",
+        logo: "bg-clip-text text-transparent bg-gradient-to-r from-[#016FEE] to-[#3d8ef5]",
         foreground: "bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60",
       },
       size: {

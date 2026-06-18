@@ -1,0 +1,46 @@
+## Web SQL 客户端
+
+SQLPub 提供在线 SQL 工具（[client.sqlpub.com](https://client.sqlpub.com)），无需安装客户端即可查询和管理数据。
+
+### 从控制台连接
+
+**共享实例**支持一键跳转：
+
+1. 登录 [控制台](https://console.sqlpub.com/user/login)。
+2. 进入 **共享实例**，在目标数据库行点击 **连接数据库**；或进入 **详情页** 点击 **连接数据库**。
+3. 系统获取临时 SSO Token，自动打开 Web SQL 客户端并完成登录。
+
+Serverless 实例请使用详情页中的连接地址，通过标准 MySQL 客户端或 Web 工具连接。
+
+### 功能特性
+
+- 浏览器内直接执行 SQL 查询
+- 无需下载安装桌面客户端
+- 支持 AI 增强（控制台顶部 **✨ Ask AI** 也可唤起 AI 助手）
+
+### 使用 MySQL 客户端连接
+
+除 Web 客户端外，也可使用命令行或图形化工具：
+
+```bash
+mysql -h <host> -P <port> -u <user> -p<password> <database>
+```
+
+支持 MySQL Workbench、DBeaver、Navicat 等标准 MySQL 客户端。连接信息在控制台详情页获取。
+
+### 通过 API 查询
+
+在 **个人中心 → 密钥管理** 创建 API Key 后，可通过 REST API 执行查询：
+
+```
+POST https://api.sqlpub.com/api/v1/databases/{database_name}/query
+POST https://api.sqlpub.com/api/v1/databases/{database_name}/execute
+```
+
+详见 [API 文档](/docs/api)。
+
+### 注意事项
+
+- SSO 连接 Token 为临时凭证，请勿泄露。
+- Serverless 实例缩容至零后，首次连接可能需要数秒冷启动。
+- 应用程序建议使用连接池，并合理设置超时时间。

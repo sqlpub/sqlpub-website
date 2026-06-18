@@ -1,0 +1,56 @@
+SQLPub REST API 现已支持 **API Key 细粒度权限控制**。你可以为不同应用创建独立的 Key，并精确限制其只能查询或只能执行写操作，降低密钥泄露带来的风险。
+
+## 两种权限
+
+| 权限 | 标识 | 允许的操作 |
+| --- | --- | --- |
+| 查询 | `query` | 调用 `/query` 接口，仅支持 `SELECT` |
+| 执行 | `execute` | 调用 `/execute` 接口，支持 `INSERT` / `UPDATE` / `DELETE` |
+
+创建 Key 时可勾选一项或两项。未指定权限时，默认同时拥有 `query` 与 `execute`。
+
+## 典型使用场景
+
+**只读分析服务** — 仅授予 `query` 权限，即使 Key 泄露也无法修改数据：
+
+```bash
+curl -X POST "https://api.sqlpub.com/api/v1/databases/my_db/query" \
+  -H "Authorization: Bearer READ_ONLY_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"sql": "SELECT COUNT(*) FROM orders"}'
+```
+
+**后台写入服务** — 同时授予 `query` 与 `execute`，用于业务逻辑读写：
+
+```bash
+curl -X POST "https://api.sqlpub.com/api/v1/databases/my_db/execute" \
+  -H "Authorization: Bearer WRITE_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"sql": "INSERT INTO logs (message) VALUES (\"ok\")"}'
+```
+
+若 Key 仅有 `query` 权限却调用 `/execute`，API 将返回 **403 Forbidden**。
+
+## 控制台操作
+
+1. 登录控制台，进入 **个人中心 → 密钥管理**
+2. 点击 **创建**，填写名称并勾选所需权限
+3. 已创建的 Key 可通过 **修改权限** 随时调整，无需重新生成
+4. 支持 **启用 / 禁用** Key，临时停用而不删除
+
+## 技术实现
+
+此次更新横跨三个项目：
+
+- **sqlpub**（v2.10.1）：`user_api_key` 表新增 `permissions` 字段，创建与编辑接口支持权限写入
+- **sqlpub-api**（v0.0.63）：鉴权中间件解析 Key 权限，按路由校验 `query` / `execute`；Key 缓存支持权限热更新
+- **sqlpub-console-ui**（v0.5.5）：密钥管理页新增权限选择与编辑表单
+
+## 安全建议
+
+- 为每个应用 / 环境创建独立 Key，遵循最小权限原则
+- 只读场景仅授予 `query`，避免不必要的写权限
+- 定期轮换 Key，及时禁用不再使用的密钥
+- 切勿将 Key 提交到代码仓库，使用环境变量或密钥管理服务
+
+更多接口说明请参阅 [API 文档](/docs/api)。

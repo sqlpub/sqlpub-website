@@ -20,12 +20,20 @@ export function generateStaticParams() {
   return [
     { slug: "introduction" },
     { slug: "overview" },
-    { slug: "create-database" },
-    { slug: "connect-database" },
-    { slug: "scale-database" },
-    { slug: "api" },
-    { slug: "limits" },
     { slug: "architecture" },
+    { slug: "pricing" },
+    { slug: "console" },
+    { slug: "create-database" },
+    { slug: "user-db" },
+    { slug: "serverless-instance" },
+    { slug: "connect-database" },
+    { slug: "driver-connect" },
+    { slug: "web-client" },
+    { slug: "scale-database" },
+    { slug: "backup" },
+    { slug: "api" },
+    { slug: "account-billing" },
+    { slug: "limits" },
   ];
 }
 

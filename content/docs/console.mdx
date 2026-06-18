@@ -1,0 +1,51 @@
+## 控制台指南
+
+SQLPub 控制台（[console.sqlpub.com](https://console.sqlpub.com)）是管理数据库、实例、账单与账号的统一入口。登录后默认进入 **控制台 → 概览**。
+
+### 控制台导航
+
+| 菜单 | 路径 | 说明 |
+| --- | --- | --- |
+| 概览 | `/dashboard/overview` | 云数据库数量、运行中、即将过期、已过期统计 |
+| 共享实例 | `/dashboard/userDb` | 免费版 / 开发版共享实例 schema 管理 |
+| Serverless 实例 | `/dashboard/instance` | Serverless 独享实例管理 |
+
+顶部还提供 **✨ Ask AI** 全局 AI 助手，可辅助解答数据库相关问题。
+
+### 个人中心
+
+通过头像菜单或侧边栏进入 **个人中心**（`/account`）：
+
+| 页面 | 路径 | 功能 |
+| --- | --- | --- |
+| 基本信息 | `/account/base` | 查看邮箱/手机，修改昵称与头像 |
+| 我的钱包 | `/account/wallet` | 查看余额、充值 |
+| 我的订单 | `/account/order` | 数据库订阅、Serverless 订阅、充值订单 |
+| 我的账单 | `/account/billing` | Serverless 日账单与小时明细 |
+| 账号安全 | `/account/security` | 修改密码、注销账号 |
+| 密钥管理 | `/account/apikey` | 创建与管理 API Key |
+
+### 产品入口对照
+
+| 方案 | 控制台入口 | 实例类型 |
+| --- | --- | --- |
+| 免费版、开发版 | 共享实例 | 共享实例，1 个 schema |
+| Serverless 版 | Serverless 实例 | 独享实例 |
+
+详见[价格方案](/docs/pricing)。
+
+### 常用工作流
+
+1. **新建共享 schema**：共享实例 → 创建 → 选择免费版或开发版
+2. **新建 Serverless 实例**：Serverless 实例 → 创建
+3. **连接并查询**：共享实例 / 详情页 → 连接数据库 → 跳转 Web SQL 客户端
+4. **免费版升级开发版**：共享实例 → 升级，或详情页资源类型旁的升级链接
+5. **查看账单**：个人中心 → 我的账单 / 我的钱包
+
+### 相关文档
+
+- [共享实例](/docs/user-db)
+- [Serverless 实例](/docs/serverless-instance)
+- [连接数据库](/docs/connect-database)
+- [驱动连接教程](/docs/driver-connect)
+- [账号与账单](/docs/account-billing)
