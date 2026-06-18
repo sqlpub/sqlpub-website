@@ -26,7 +26,7 @@ export const Navbar = () => {
           </NextLink>
 
           {/* Desktop Navigation */}
-          <NavigationMenuPrimitive.Root className="hidden lg:flex">
+          <NavigationMenuPrimitive.Root className="hidden md:flex">
             <NavigationMenuPrimitive.List className="flex items-center gap-6">
               {siteConfig.navItems.map((item) => (
                 <NavigationMenuPrimitive.Item key={item.href}>
@@ -48,9 +48,9 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Right Actions */}
-        <div className="hidden sm:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4">
           <ThemeSwitch />
-          <div className="hidden md:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Button variant="flat" size="sm" asChild>
               <a href={siteConfig.links.login}>登 录</a>
             </Button>
@@ -61,7 +61,7 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Right Actions */}
-        <div className="flex sm:hidden items-center gap-2">
+        <div className="flex md:hidden items-center gap-2">
           <a
             href={siteConfig.links.github}
             target="_blank"
