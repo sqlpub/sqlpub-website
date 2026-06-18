@@ -1,3 +1,107 @@
 @import "tailwindcss";
 
-@config "../tailwind.config.js"
+@config "../tailwind.config.js";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 160 10% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 160 10% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 10% 8%;
+    --primary: 160 100% 37%;
+    --primary-foreground: 160 30% 6%;
+    --secondary: 160 12% 95%;
+    --secondary-foreground: 160 10% 12%;
+    --muted: 160 12% 95%;
+    --muted-foreground: 160 6% 42%;
+    --accent: 160 60% 94%;
+    --accent-foreground: 160 10% 12%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 12% 88%;
+    --input: 160 12% 88%;
+    --ring: 160 100% 37%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 156 8% 5%;
+    --foreground: 150 12% 96%;
+    --card: 156 8% 8%;
+    --card-foreground: 150 12% 96%;
+    --popover: 156 8% 7%;
+    --popover-foreground: 150 12% 96%;
+    --primary: 158 100% 45%;
+    --primary-foreground: 156 30% 5%;
+    --secondary: 156 6% 14%;
+    --secondary-foreground: 150 12% 96%;
+    --muted: 156 6% 13%;
+    --muted-foreground: 150 6% 62%;
+    --accent: 156 8% 16%;
+    --accent-foreground: 150 12% 96%;
+    --destructive: 0 62.8% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 156 7% 16%;
+    --input: 156 7% 16%;
+    --ring: 158 100% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Syntax highlighting (rehype-highlight / highlight.js tokens) */
+@layer components {
+  .prose pre {
+    @apply rounded-lg border border-border bg-muted/60 text-foreground;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0 text-sm font-normal;
+  }
+  .prose :not(pre) > code {
+    @apply rounded bg-muted px-1.5 py-0.5 text-sm font-medium text-foreground before:content-none after:content-none;
+  }
+
+  .hljs-comment,
+  .hljs-quote {
+    @apply text-muted-foreground italic;
+  }
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-section,
+  .hljs-doctag,
+  .hljs-type,
+  .hljs-name,
+  .hljs-strong {
+    @apply text-primary;
+  }
+  .hljs-string,
+  .hljs-attr,
+  .hljs-template-tag,
+  .hljs-addition {
+    color: hsl(35 95% 55%);
+  }
+  .hljs-number,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-meta {
+    color: hsl(210 90% 62%);
+  }
+  .hljs-title,
+  .hljs-built_in,
+  .hljs-function .hljs-title {
+    color: hsl(280 65% 70%);
+  }
+  .hljs-deletion {
+    @apply text-destructive;
+  }
+}

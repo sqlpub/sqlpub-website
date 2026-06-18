@@ -1,292 +1,157 @@
 import Image from "next/image";
-import { Link } from "@heroui/link";
-import { button as buttonStyles } from "@heroui/theme";
+import Link from "next/link";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const features = [
+  {
+    image: "/free-plan.png",
+    title: "免费计划",
+    description: "永久免费额度，无需付费即可使用",
+  },
+  {
+    image: "/billing.png",
+    title: "按使用量计费",
+    description: "只为使用量付费，无需包年包月",
+  },
+  {
+    image: "/autoscale.png",
+    title: "自动伸缩",
+    description: "负载变化时自动扩缩容（Serverless 实例）",
+  },
+  {
+    image: "/no-ops.png",
+    title: "免运维",
+    description: "无需管理数据库，由专业团队管理",
+  },
+  {
+    image: "/auto-add-index.png",
+    title: "SQL 自动优化",
+    description: "索引自动添加，提高查询效率",
+  },
+  {
+    image: "/rw-separation.png",
+    title: "读写分离",
+    description: "读取负载自动分配到 OLAP 实例，提高查询效率",
+  },
+  {
+    image: "/auto-backup.png",
+    title: "数据安全",
+    description: "提供数据自动备份，保障数据安全（付费实例）",
+  },
+  {
+    image: "/sql-web-client.png",
+    title: "Web 在线 SQL 工具",
+    description: "在线 SQL 工具，无需下载，快速查询数据，支持 AI 增强",
+  },
+];
 
 export default function Home() {
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-xl text-center justify-center">
-        <span className={title()}>免费的&nbsp;</span>
-        <span className={title({ color: "logo" })}>MySQL&nbsp;</span>
-        <br />
-        <span className={title()}>无服务器数据库平台</span>
-        <div className={subtitle({ class: "mt-4" })}>
-          深受开发者信赖，助您快速构建可靠性、可扩展的现代应用。
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.signup}
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="relative flex flex-col items-center justify-center gap-6 py-16 text-center md:py-24">
+        {/* glow background */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
         >
-          免费开始
-        </Link>
+          <div className="absolute left-1/2 top-0 h-[420px] w-[680px] max-w-full -translate-x-1/2 rounded-full bg-primary/20 blur-[120px]" />
+          <div className="absolute inset-0 bg-grid-pattern bg-[size:44px_44px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_60%,transparent_100%)]" />
+        </div>
+
         <Link
-          // isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={"/contact-sales"}
+          href="/blog"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-4 py-1.5 text-sm text-muted-foreground backdrop-blur transition-colors hover:border-primary/40 hover:text-foreground"
         >
-          联系我们
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          全新 AI 增强 SQL 工具已上线
+          <ArrowRight className="h-3.5 w-3.5" />
         </Link>
+
+        <div className="max-w-3xl">
+          <h1 className="text-balance">
+            <span className={cn(title({ size: "lg" }))}>免费的&nbsp;</span>
+            <span className={cn(title({ color: "green", size: "lg" }))}>
+              MySQL&nbsp;
+            </span>
+            <br />
+            <span className={cn(title({ size: "lg" }))}>无服务器数据库平台</span>
+          </h1>
+          <p className={cn(subtitle({ class: "mx-auto mt-6" }))}>
+            深受开发者信赖，助您快速构建可靠、可扩展的现代应用。
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Button size="lg" radius="full" className="shadow-glow-sm" asChild>
+            <a
+              href={siteConfig.links.signup}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              免费开始
+              <ArrowRight className="ml-1 h-4 w-4" />
+            </a>
+          </Button>
+          <Button variant="outline" size="lg" radius="full" asChild>
+            <Link href="/contact-sales">联系我们</Link>
+          </Button>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="py-12 md:py-16">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <h2 className={cn(title({ size: "sm" }))}>为现代应用而生</h2>
+          <p className={cn(subtitle({ class: "mx-auto mt-3" }))}>
+            从开发到生产，提供你所需的一切数据库能力。
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature) => (
+            <FeatureCard key={feature.title} {...feature} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function FeatureCard({
+  image,
+  title: cardTitle,
+  description,
+}: {
+  image: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/40 hover:shadow-glow">
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-border bg-secondary/40">
+        <Image
+          alt={cardTitle}
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          src={image}
+        />
       </div>
-      <div className="mt-12 flex flex-col gap-12 text-center">
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="免费计划"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/free-plan.png"
-              width={1690}
-            />
-          </div>
 
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">免费计划</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              永久免费额度，无需付费即可使用
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="按量计费"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/billing.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">按使用量计费</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              只为使用量付费，无需包年包月
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="自动伸缩"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/autoscale.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">自动伸缩</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              负载变化时自动扩缩容（Serverless实例）
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="免运维"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/no-ops.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">免运维</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              无需管理数据库，由专业团队管理
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="SQL自动优化"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/auto-add-index.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">SQL自动优化</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              索引自动添加，提高查询效率
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="读写分离"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/rw-separation.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">读写分离</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              读取负载自动分配到OLAP实例，提高查询效率
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="数据安全"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/auto-backup.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">数据安全</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              提供数据自动备份，保障数据安全（付费实例）
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center overflow-hidden rounded-xl border border-default-200 bg-background">
-          <div className="relative w-full overflow-hidden">
-            <Image
-              priority
-              alt="Web在线SQL工具"
-              className="
-                w-full
-                h-auto
-                object-cover
-                max-h-[70vh]
-                md:max-h-[420px]
-                lg:max-h-[480px]
-              "
-              height={960}
-              sizes="100vw"
-              src="/sql-web-client.png"
-              width={1690}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between gap-6 px-6 py-4 text-center">
-            <div className="flex flex-col gap-2">
-              <span className="text-xl font-bold">Web在线SQL工具</span>
-            </div>
-
-            <div className="shrink-0 text-sm text-default-400">
-              在线SQL工具，无需下载，快速查询数据，支持AI增强
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col gap-1.5 px-5 py-4">
+        <span className="text-base font-semibold text-foreground">
+          {cardTitle}
+        </span>
+        <span className="text-sm leading-relaxed text-muted-foreground">
+          {description}
+        </span>
       </div>
-    </section>
+    </div>
   );
 }

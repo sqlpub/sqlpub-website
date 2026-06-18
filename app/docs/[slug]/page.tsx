@@ -1,3 +1,5 @@
+import { DocsPager } from "@/components/docs/pager";
+
 export default async function Page({
   params,
 }: {
@@ -6,7 +8,12 @@ export default async function Page({
   const { slug } = await params;
   const { default: Post } = await import(`@/content/docs/${slug}.mdx`);
 
-  return <Post />;
+  return (
+    <>
+      <Post />
+      <DocsPager slug={slug} />
+    </>
+  );
 }
 
 export function generateStaticParams() {
@@ -18,7 +25,6 @@ export function generateStaticParams() {
     { slug: "scale-database" },
     { slug: "api" },
     { slug: "limits" },
-    { slug: "architecture" },
     { slug: "architecture" },
   ];
 }

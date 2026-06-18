@@ -1,5 +1,3 @@
-import {title} from "@/components/primitives";
-
 export default function BlogLayout({
   children,
 }: {
