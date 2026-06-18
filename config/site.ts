@@ -69,7 +69,7 @@ export const siteConfig = {
     signup: "https://console.sqlpub.com/user/signup",
     feedback: "https://console.sqlpub.com/feedback",
     sponsor: "https://console.sqlpub.com/sponsorV2",
-    investment: "https://console.sqlpub.com/investment",
+    investment: "/investment",
     forgotPassword: "https://console.sqlpub.com/user/forgotPassword",
     logoff: "https://console.sqlpub.com/account/security",
     useQuery: "https://console.sqlpub.com/dashboard",

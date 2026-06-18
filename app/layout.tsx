@@ -107,9 +107,7 @@ export default function RootLayout({
                     </Link>
                     <Link
                       className="text-muted-foreground hover:text-primary"
-                      href={siteConfig.links.investment}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="/investment"
                     >
                       寻找投资
                     </Link>
