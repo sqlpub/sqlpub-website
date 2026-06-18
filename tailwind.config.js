@@ -50,6 +50,14 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        glow: "0 0 0 1px hsl(var(--primary) / 0.25), 0 0 40px -8px hsl(var(--primary) / 0.45)",
+        "glow-sm": "0 0 24px -6px hsl(var(--primary) / 0.5)",
+      },
+      backgroundImage: {
+        "grid-pattern":
+          "linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px)",
+      },
     },
   },
   darkMode: "class",
