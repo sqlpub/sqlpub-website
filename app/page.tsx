@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldAlert, Sparkles } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
@@ -101,6 +101,28 @@ export default function Home() {
           <Button variant="outline" size="lg" radius="full" asChild>
             <Link href="/contact-sales">联系我们</Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Compliance notice */}
+      <section
+        aria-label="合规使用提示"
+        className="border-y border-amber-500/25 bg-amber-500/5 py-5 md:py-6"
+      >
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-3 px-4 text-center sm:flex-row sm:items-start sm:gap-4 sm:text-left">
+          <ShieldAlert
+            aria-hidden="true"
+            className="mt-0.5 h-6 w-6 shrink-0 text-amber-600 dark:text-amber-400"
+          />
+          <div className="space-y-1.5">
+            <p className="text-base font-semibold text-foreground">
+              严禁非法使用
+            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              SQLPub
+              仅供合法合规用途。严禁利用本平台从事诈骗、传销、赌博、色情、黑客攻击、数据窃取、侵犯隐私或其他任何违法违规活动。一经发现，我们将立即封禁相关账号与资源，并依法配合监管与执法部门调查。
+            </p>
+          </div>
         </div>
       </section>
 

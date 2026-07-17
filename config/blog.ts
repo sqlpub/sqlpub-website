@@ -9,6 +9,15 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "system-status-page",
+    title: "SQLPub 系统状态页上线：透明展示各服务可用性",
+    date: "2026-07-11",
+    description:
+      "status.sqlpub.com 正式上线，公开控制台、API、数据库等核心组件状态，控制台顶部同步显示状态徽章。",
+    category: "产品",
+    readTime: 5,
+  },
+  {
     slug: "api-key-permissions",
     title: "API Key 权限控制上线：按需授予查询与执行权限",
     date: "2026-06-12",
