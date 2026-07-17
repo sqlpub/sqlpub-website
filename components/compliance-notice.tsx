@@ -3,17 +3,26 @@
 import { useEffect, useState } from "react";
 import { ShieldAlert, X } from "lucide-react";
 
-const STORAGE_KEY = "sqlpub-compliance-notice-dismissed";
+const STORAGE_KEY = "sqlpub-compliance-notice-dismissed-at";
+const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function isDismissed(): boolean {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const dismissedAt = Number(raw);
+    if (!Number.isFinite(dismissedAt)) return false;
+    return Date.now() - dismissedAt < DISMISS_TTL_MS;
+  } catch {
+    return false;
+  }
+}
 
 export function ComplianceNotice() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    try {
-      if (localStorage.getItem(STORAGE_KEY) !== "1") {
-        setVisible(true);
-      }
-    } catch {
+    if (!isDismissed()) {
       setVisible(true);
     }
   }, []);
@@ -21,7 +30,7 @@ export function ComplianceNotice() {
   function dismiss() {
     setVisible(false);
     try {
-      localStorage.setItem(STORAGE_KEY, "1");
+      localStorage.setItem(STORAGE_KEY, String(Date.now()));
     } catch {
       // ignore storage errors
     }
