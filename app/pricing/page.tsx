@@ -4,7 +4,18 @@ import { title, subtitle } from "@/components/primitives";
 import { Button } from "@/components/ui/button";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
+import {
+  findPlan,
+  formatOverageTip,
+  formatPriceYear,
+  formatQueriesPerHour,
+  formatStorageFromMb,
+  fetchUserDbPlansCatalog,
+  type UserDbPlanItem,
+} from "@/lib/user-db-plans";
 import { cn } from "@/lib/utils";
+
+export const revalidate = 300;
 
 type Feature = {
   text: string;
@@ -29,76 +40,98 @@ type Plan = {
   meters?: Meter[];
 };
 
-const plans: Plan[] = [
-  {
-    name: "免费版",
-    price: "¥0",
+const serverlessPlan: Plan = {
+  name: "Serverless 版",
+  price: "按量付费",
+  period: "",
+  description: "生产级弹性伸缩，用多少付多少",
+  cta: "去体验",
+  variant: "outline",
+  meters: [
+    {
+      label: "计算费用",
+      price: "0.045元 / CU / 小时",
+      note: "自动伸缩按秒计费",
+    },
+    {
+      label: "存储费用",
+      price: "0.5元 / GB / 月",
+      note: "按实际使用",
+    },
+    {
+      label: "流量费用",
+      price: "0.5元 / GB",
+      note: "50GB 免费/月，当前免费",
+    },
+  ],
+  features: [
+    { text: "独享实例", tip: "独立 MySQL 实例，无数据库个数限制" },
+    { text: "最大 3000 个连接" },
+    { text: "自动扩展至 2CU", tip: "2 个 vCPU，8 GB RAM" },
+    { text: "2 小时不使用自动缩放到 0" },
+    { text: "私有网络 / IP 限制", tip: "后续支持" },
+    { text: "99.9% SLA", tip: "服务等级协议" },
+  ],
+};
+
+function buildFreePlan(plan: UserDbPlanItem): Plan {
+  return {
+    name: plan.displayName || "免费版",
+    price: formatPriceYear(plan.priceYear),
     period: "/ 月",
-    description: "适合个人项目与学习尝鲜",
+    description: plan.description || "",
     cta: "开始使用",
     variant: "outline",
     features: [
       { text: "共享实例", tip: "申请获得 1 个独立 schema" },
-      { text: "0.5GB 存储空间", tip: "超出锁定，升级开发版自动解锁" },
-      { text: "30 个连接" },
-      { text: "3.6万次请求 / 小时" },
+      {
+        text: `${formatStorageFromMb(plan.limitSizeMb)} 存储空间`,
+        tip: "超出锁定，升级开发版自动解锁",
+      },
+      { text: `${plan.limitConnSize ?? "-"} 个连接` },
+      { text: formatQueriesPerHour(plan.maxQueriesPerHour) },
       { text: "5G 公网流量 / 月" },
     ],
-  },
-  {
-    name: "开发版",
-    price: "¥9.9",
+  };
+}
+
+function buildDeveloperPlan(plan: UserDbPlanItem): Plan {
+  const overageTip = formatOverageTip(plan.overagePricePerGibMonth);
+  return {
+    name: plan.displayName || "开发版",
+    price: formatPriceYear(plan.priceYear),
     period: "/ 年",
-    description: "性价比之选，适合个人开发者长期使用",
+    description: plan.description || "",
     cta: "立即购买",
     variant: "default",
     featured: true,
     features: [
       { text: "共享实例", tip: "申请获得 1 个独立 schema" },
-      { text: "1GB 存储空间", tip: "超出 0.35元/GB/月，需保持余额充足" },
-      { text: "50 个连接" },
-      { text: "7.2万次请求 / 小时" },
+      {
+        text: `${formatStorageFromMb(plan.limitSizeMb)} 存储空间`,
+        tip: overageTip || "超出按量计费，需保持余额充足",
+      },
+      { text: `${plan.limitConnSize ?? "-"} 个连接` },
+      { text: formatQueriesPerHour(plan.maxQueriesPerHour) },
       { text: "10G 公网流量", tip: "超出 0.7元/GB (当前免费)" },
       { text: "优质共享资源池", tip: "稳定性和性能优于免费版" },
       { text: "自动备份", tip: "1次 / 天，保留3个" },
     ],
-  },
-  {
-    name: "Serverless 版",
-    price: "按量付费",
-    period: "",
-    description: "生产级弹性伸缩，用多少付多少",
-    cta: "去体验",
-    variant: "outline",
-    meters: [
-      {
-        label: "计算费用",
-        price: "0.045元 / CU / 小时",
-        note: "自动伸缩按秒计费",
-      },
-      {
-        label: "存储费用",
-        price: "0.5元 / GB / 月",
-        note: "按实际使用",
-      },
-      {
-        label: "流量费用",
-        price: "0.5元 / GB",
-        note: "50GB 免费/月，当前免费",
-      },
-    ],
-    features: [
-      { text: "独享实例", tip: "独立 MySQL 实例，无数据库个数限制" },
-      { text: "最大 3000 个连接" },
-      { text: "自动扩展至 2CU", tip: "2 个 vCPU，8 GB RAM" },
-      { text: "2 小时不使用自动缩放到 0" },
-      { text: "私有网络 / IP 限制", tip: "后续支持" },
-      { text: "99.9% SLA", tip: "服务等级协议" },
-    ],
-  },
-];
+  };
+}
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const catalog = await fetchUserDbPlansCatalog();
+  const free = findPlan(catalog?.plans, "Free");
+  const developer = findPlan(catalog?.plans, "Developer");
+  const sharedUnavailable = !free || !developer;
+
+  const plans: Plan[] = [
+    ...(free ? [buildFreePlan(free)] : []),
+    ...(developer ? [buildDeveloperPlan(developer)] : []),
+    serverlessPlan,
+  ];
+
   return (
     <div className="flex flex-col items-center">
       <div className="text-center">
@@ -113,6 +146,12 @@ export default function PricingPage() {
           从免费起步，随业务增长无缝升级。所有方案均支持标准 MySQL 协议。
         </p>
       </div>
+
+      {sharedUnavailable && (
+        <p className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-center text-sm text-muted-foreground">
+          共享实例套餐信息暂时无法加载，请稍后刷新；Serverless 方案仍可查看。
+        </p>
+      )}
 
       <div className="mt-12 grid w-full grid-cols-1 items-start gap-8 md:grid-cols-3">
         {plans.map((plan) => (
@@ -205,7 +244,10 @@ export default function PricingPage() {
 
       <p className="mt-12 text-center text-sm text-muted-foreground">
         需要更高规格或企业定制方案？{" "}
-        <a href="/contact-sales" className="font-medium text-primary hover:underline">
+        <a
+          href="/contact-sales"
+          className="font-medium text-primary hover:underline"
+        >
           联系销售
         </a>
       </p>

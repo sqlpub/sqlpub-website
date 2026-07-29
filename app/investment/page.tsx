@@ -4,6 +4,11 @@ import type { Metadata } from "next";
 
 import { title, subtitle } from "@/components/primitives";
 import { Button } from "@/components/ui/button";
+import {
+  findPlan,
+  formatPriceYear,
+  fetchUserDbPlansCatalog,
+} from "@/lib/user-db-plans";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -11,6 +16,8 @@ export const metadata: Metadata = {
   description:
     "SQLPub 是面向开发者的 Serverless MySQL 平台，欢迎投资机构与战略合作伙伴与我们联系。",
 };
+
+export const revalidate = 300;
 
 const highlights = [
   {
@@ -67,7 +74,13 @@ function Section({
   );
 }
 
-export default function InvestmentPage() {
+export default async function InvestmentPage() {
+  const catalog = await fetchUserDbPlansCatalog();
+  const developer = findPlan(catalog?.plans, "Developer");
+  const developerPriceLabel = developer
+    ? `${formatPriceYear(developer.priceYear)} / 年订阅 + 存储超量`
+    : "年订阅 + 存储超量（价格加载失败）";
+
   return (
     <div className="flex flex-col">
       <div className="text-center">
@@ -158,7 +171,7 @@ export default function InvestmentPage() {
                 <tr>
                   <td className="px-4 py-3">开发版</td>
                   <td className="px-4 py-3">共享实例</td>
-                  <td className="px-4 py-3">¥9.9 / 年订阅 + 存储超量</td>
+                  <td className="px-4 py-3">{developerPriceLabel}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3">Serverless 版</td>
