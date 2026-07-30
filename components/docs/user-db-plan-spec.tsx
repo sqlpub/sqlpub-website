@@ -17,33 +17,6 @@ function Unavailable({ label }: { label?: string }) {
   );
 }
 
-function SpecTable({
-  rows,
-  valueHeader,
-}: {
-  rows: { label: string; value: string }[];
-  valueHeader: string;
-}) {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>项目</th>
-          <th>{valueHeader}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
-          <tr key={row.label}>
-            <td>{row.label}</td>
-            <td>{row.value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
 function freeStorageTip(mode: "pricing" | "limits"): string {
   return mode === "pricing"
     ? "超出后锁定，升级开发版可自动解锁"
@@ -109,7 +82,9 @@ function buildRows(
   return rows;
 }
 
-/** 单个套餐规格表（定价 / 限制页）——结构对齐原 MDX，样式走 prose */
+/**
+ * 仅输出规格表。标题 / 导语留在 MDX，以便 rehype-slug + autolink-headings 生效。
+ */
 export async function UserDbPlanSpecTable({
   planCode,
   mode = "pricing",
@@ -123,30 +98,26 @@ export async function UserDbPlanSpecTable({
     return <Unavailable />;
   }
 
-  const title =
-    plan.displayName ||
-    (planCode === "Free" ? "免费版" : planCode === "Developer" ? "开发版" : planCode);
-  const priceLine = formatPlanPriceWithPeriod(planCode, plan.priceYear);
-  const description = plan.description?.trim();
+  const rows = buildRows(plan, mode);
+  const valueHeader = mode === "limits" ? "限制" : "额度";
 
   return (
-    <>
-      <h3>
-        {title}
-        {mode === "limits" ? "（共享实例）" : ""}
-      </h3>
-      {mode === "pricing" && (
-        <p>
-          <strong>{priceLine}</strong>
-          {description ? ` — ${description}。` : " — "}
-          <strong>共享实例</strong>，申请获得 1 个 schema。
-        </p>
-      )}
-      <SpecTable
-        rows={buildRows(plan, mode)}
-        valueHeader={mode === "limits" ? "限制" : "额度"}
-      />
-    </>
+    <table>
+      <thead>
+        <tr>
+          <th>项目</th>
+          <th>{valueHeader}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.label}>
+            <td>{row.label}</td>
+            <td>{row.value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -159,9 +130,9 @@ export async function UserDbPlanPriceLabel({
   const catalog = await fetchUserDbPlansCatalog();
   const plan = findPlan(catalog?.plans, planCode);
   if (!plan) {
-    return <span>价格加载失败</span>;
+    return <>价格加载失败</>;
   }
-  return <span>{formatPlanPriceWithPeriod(planCode, plan.priceYear)}</span>;
+  return <>{formatPlanPriceWithPeriod(planCode, plan.priceYear)}</>;
 }
 
 /** 仅价格数字，如「¥9.9」 */
@@ -169,9 +140,9 @@ export async function UserDbPlanPrice({ planCode }: { planCode: string }) {
   const catalog = await fetchUserDbPlansCatalog();
   const plan = findPlan(catalog?.plans, planCode);
   if (!plan) {
-    return <span>-</span>;
+    return <>-</>;
   }
-  return <span>{formatPriceYear(plan.priceYear)}</span>;
+  return <>{formatPriceYear(plan.priceYear)}</>;
 }
 
 /** 内联字段：storage / conn / qph / overage */
@@ -185,23 +156,23 @@ export async function UserDbPlanValue({
   const catalog = await fetchUserDbPlansCatalog();
   const plan = findPlan(catalog?.plans, planCode);
   if (!plan) {
-    return <span>-</span>;
+    return <>-</>;
   }
   switch (field) {
     case "storage":
-      return <span>{formatStorageFromMb(plan.limitSizeMb)}</span>;
+      return <>{formatStorageFromMb(plan.limitSizeMb)}</>;
     case "conn":
-      return <span>{plan.limitConnSize ?? "-"}</span>;
+      return <>{plan.limitConnSize ?? "-"}</>;
     case "qph":
-      return <span>{formatQueriesPerHourDocs(plan.maxQueriesPerHour)}</span>;
+      return <>{formatQueriesPerHourDocs(plan.maxQueriesPerHour)}</>;
     case "overage":
-      return <span>{formatOveragePrice(plan.overagePricePerGibMonth)}</span>;
+      return <>{formatOveragePrice(plan.overagePricePerGibMonth)}</>;
     default:
-      return <span>-</span>;
+      return <>-</>;
   }
 }
 
-/** 存储超量对照表 + 说明（limits 页）——结构对齐原 MDX */
+/** 存储超量对照表 + 说明（limits 页） */
 export async function UserDbStorageOverageSection() {
   const catalog = await fetchUserDbPlansCatalog();
   const free = findPlan(catalog?.plans, "Free");
