@@ -61,6 +61,19 @@ export function formatQueriesPerHour(qph?: number): string {
   return `${qph}次请求 / 小时`;
 }
 
+/** 文档表格用：如「3.6 万次 / 小时」 */
+export function formatQueriesPerHourDocs(qph?: number): string {
+  if (qph == null || Number.isNaN(qph)) {
+    return "-";
+  }
+  if (qph >= 10000) {
+    const wan = qph / 10000;
+    const text = wan % 1 === 0 ? String(wan) : wan.toFixed(1).replace(/\.0$/, "");
+    return `${text} 万次 / 小时`;
+  }
+  return `${qph} 次 / 小时`;
+}
+
 export function formatPriceYear(priceYear?: number | string): string {
   if (priceYear == null || priceYear === "") {
     return "-";
@@ -73,6 +86,32 @@ export function formatPriceYear(priceYear?: number | string): string {
     return "¥0";
   }
   return `¥${n}`;
+}
+
+/** 文档标题用：免费版「¥0 / 月」，开发版「¥9.9 / 年」 */
+export function formatPlanPriceWithPeriod(
+  planCode: string,
+  priceYear?: number | string
+): string {
+  const price = formatPriceYear(priceYear);
+  if (price === "-") {
+    return "-";
+  }
+  if (planCode === "Free" || Number(priceYear) === 0) {
+    return `${price} / 月`;
+  }
+  return `${price} / 年`;
+}
+
+export function formatOveragePrice(overage?: number | string): string {
+  if (overage == null || overage === "") {
+    return "-";
+  }
+  const n = Number(overage);
+  if (Number.isNaN(n)) {
+    return "-";
+  }
+  return `${n} 元 / GB / 月`;
 }
 
 export function formatOverageTip(overage?: number | string): string | undefined {

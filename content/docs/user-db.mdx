@@ -11,7 +11,7 @@
    - 资源类型：免费版 或 开发版
    - 节点区域：中国 / 新加坡（海外节点仅开发版可用）
 3. **免费版**：确认后立即创建（每账号限 1 个）。
-4. **开发版（¥9.9 / 年）**：选择微信支付或余额支付，支付成功后自动创建并跳转详情页。
+4. **开发版（<UserDbPlanPriceLabel planCode="Developer" />）**：选择微信支付或余额支付，支付成功后自动创建并跳转详情页。
 
 ### 列表操作
 
@@ -43,21 +43,21 @@
 
 应用开发可使用各语言 MySQL 驱动连接，详见 [驱动连接教程](/docs/driver-connect)。
 
-免费版请求上限 3.6 万次 / 小时，开发版 7.2 万次 / 小时。
+免费版请求上限 <UserDbPlanValue planCode="Free" field="qph" />，开发版 <UserDbPlanValue planCode="Developer" field="qph" />。
 
 ### 存储超量
 
 详情页用量环图可查看当前存储占用。超量后的处理因方案不同：
 
-**免费版（0.5GB）：**
+**免费版（<UserDbPlanValue planCode="Free" field="storage" />）：**
 
-- 存储超过 0.5GB 后，数据库将被 **锁定**（状态变为禁用），无法继续写入。
-- **升级至开发版** 并完成迁移后，系统会 **自动解锁**，同时获得 1GB 基础额度。
+- 存储超过 <UserDbPlanValue planCode="Free" field="storage" /> 后，数据库将被 **锁定**（状态变为禁用），无法继续写入。
+- **升级至开发版** 并完成迁移后，系统会 **自动解锁**，同时获得 <UserDbPlanValue planCode="Developer" field="storage" /> 基础额度。
 - 也可通过清理数据使存储回落至额度内来恢复使用。
 
-**开发版（1GB）：**
+**开发版（<UserDbPlanValue planCode="Developer" field="storage" />）：**
 
-- 1GB 以内不收取额外存储费；超出部分按 **0.35 元 / GB / 月** 从钱包余额扣费。
+- <UserDbPlanValue planCode="Developer" field="storage" /> 以内不收取额外存储费；超出部分按 **<UserDbPlanValue planCode="Developer" field="overage" />** 从钱包余额扣费。
 - 请在 **个人中心 → 我的钱包** 保持余额充足，避免因欠费被锁定。
 - 详见[使用限制](/docs/limits)与[账号与账单](/docs/account-billing)。
 
@@ -81,7 +81,7 @@
 路径：`/upgrade?dbId=...`
 
 1. 在共享实例列表点击 **升级**，或详情页资源类型旁点击升级。
-2. 支付 ¥9.9 后系统自动执行数据迁移。
+2. 支付 <UserDbPlanPrice planCode="Developer" /> 后系统自动执行数据迁移。
 3. 迁移期间状态依次为：升级准备中 → 迁移数据中 → 正常（或升级异常）。
 4. 若因 **存储超量被锁定**，升级完成后会自动解锁。
 

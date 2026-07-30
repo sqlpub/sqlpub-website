@@ -1,5 +1,7 @@
 import { DocsPager } from "@/components/docs/pager";
 
+export const revalidate = 300;
+
 export default async function Page({
   params,
 }: {
