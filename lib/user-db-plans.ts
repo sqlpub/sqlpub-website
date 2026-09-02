@@ -88,7 +88,7 @@ export function formatPriceYear(priceYear?: number | string): string {
   return `¥${n}`;
 }
 
-/** 文档标题用：免费版「¥0 / 月」，开发版「¥9.9 / 年」 */
+/** 文档标题用：免费版「¥0 / 月」，基础版「¥9.9 / 年」 */
 export function formatPlanPriceWithPeriod(
   planCode: string,
   priceYear?: number | string

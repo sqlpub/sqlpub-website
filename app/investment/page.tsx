@@ -39,7 +39,7 @@ const highlights = [
 ];
 
 const advantages = [
-  "免费版与开发版降低使用门槛，共享实例模式适合个人项目快速起步",
+  "免费版与基础版降低使用门槛，共享实例模式适合个人项目快速起步",
   "Serverless 独享实例支持按秒计费与自动伸缩，覆盖生产级场景",
   "标准 MySQL 协议兼容，开发者无需改变现有技术栈",
   "控制台、Web SQL 客户端、REST API 与 AI 助手形成完整产品闭环",
@@ -76,9 +76,9 @@ function Section({
 
 export default async function InvestmentPage() {
   const catalog = await fetchUserDbPlansCatalog();
-  const developer = findPlan(catalog?.plans, "Developer");
-  const developerPriceLabel = developer
-    ? `${formatPriceYear(developer.priceYear)} / 年订阅 + 存储超量`
+  const basic = findPlan(catalog?.plans, "Basic");
+  const basicPriceLabel = basic
+    ? `${formatPriceYear(basic.priceYear)} / 年订阅 + 存储超量`
     : "年订阅 + 存储超量（价格加载失败）";
 
   return (
@@ -114,7 +114,7 @@ export default async function InvestmentPage() {
         <Section heading="我们在做什么">
           <p className="leading-relaxed text-muted-foreground">
             SQLPub 提供从免费试用到生产部署的 MySQL 数据库服务。用户可通过控制台快速创建数据库，支持
-            <strong className="text-foreground">共享实例</strong>（免费版 / 开发版）与{" "}
+            <strong className="text-foreground">共享实例</strong>（免费版 / 基础版）与{" "}
             <strong className="text-foreground">Serverless 独享实例</strong>（按量付费）两种模式，配套 Web
             SQL 客户端、自动备份、账单体系与 API 能力。
           </p>
@@ -169,9 +169,9 @@ export default async function InvestmentPage() {
                   <td className="px-4 py-3">获客与转化漏斗</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3">开发版</td>
+                  <td className="px-4 py-3">基础版</td>
                   <td className="px-4 py-3">共享实例</td>
-                  <td className="px-4 py-3">{developerPriceLabel}</td>
+                  <td className="px-4 py-3">{basicPriceLabel}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3">Serverless 版</td>

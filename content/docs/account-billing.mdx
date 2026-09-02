@@ -16,9 +16,9 @@
 
 - 查看账号余额
 - 点击 **充值** 跳转 `/recharge`，支持预设金额（¥10 / 20 / 50 / 100）或自定义（最低 ¥1）
-- 余额可用于：开发版创建/升级、**开发版存储超量按量扣费**、Serverless 按量付费抵扣
+- 余额可用于：基础版创建/升级、**基础版存储超量按量扣费**、Serverless 按量付费抵扣
 
-开发版存储超过 <UserDbPlanValue planCode="Developer" field="storage" /> 后，超出部分按 <UserDbPlanValue planCode="Developer" field="overage" /> 从钱包余额扣除。请保持余额充足，避免因欠费导致数据库被锁定。详见[使用限制](/docs/limits)。
+基础版存储超过 <UserDbPlanValue planCode="Basic" field="storage" /> 后，超出部分按 <UserDbPlanValue planCode="Basic" field="overage" /> 从钱包余额扣除。请保持余额充足，避免因欠费导致数据库被锁定。详见[使用限制](/docs/limits)。
 
 ### 我的订单
 
@@ -28,7 +28,7 @@
 
 | 订单类型 | 说明 |
 | --- | --- |
-| 数据库订阅 | 开发版创建、续费、升级 |
+| 数据库订阅 | 基础版创建、续费、升级 |
 | Serverless 订阅 | Serverless 包年包月 |
 | 钱包充值 | 账号余额充值 |
 
@@ -68,7 +68,7 @@ API 基础地址：`https://api.sqlpub.com/api/v1`
 
 | 场景 | 支付方式 |
 | --- | --- |
-| 开发版创建 / 升级 | 微信支付、余额支付 |
-| 开发版续费 | 微信支付、支付宝 |
+| 基础版创建 / 升级 | 微信支付、余额支付 |
+| 基础版续费 | 微信支付、支付宝 |
 | Serverless 包年包月续费 | 微信支付、支付宝 |
 | 钱包充值 | 微信支付 |

@@ -49,7 +49,7 @@ curl -X POST "https://api.sqlpub.com/api/v1/databases/{database_name}/query" \
 
 ### 注意事项
 
-- 免费版与开发版连接共享实例上的 schema；Serverless 连接独享实例。
+- 免费版与基础版连接共享实例上的 schema；Serverless 连接独享实例。
 - Serverless 缩容至零后，首次连接可能需要数秒冷启动，请设置合理超时。
 - 详情页提供 **释放连接数** 功能，可一键释放所有活跃连接。
 - 应用连接建议使用连接池。

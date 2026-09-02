@@ -274,8 +274,8 @@ db.SetConnMaxLifetime(0)
 
 ### 注意事项
 
-- **共享实例**（免费版 / 开发版）与 **Serverless 独享实例** 均使用标准 MySQL 协议，驱动配置方式相同。
-- 免费版并发连接上限 <UserDbPlanValue planCode="Free" field="conn" />，开发版 <UserDbPlanValue planCode="Developer" field="conn" />，Serverless 最大 3000；应用请使用连接池并控制连接数。
+- **共享实例**（免费版 / 基础版）与 **Serverless 独享实例** 均使用标准 MySQL 协议，驱动配置方式相同。
+- 免费版并发连接上限 <UserDbPlanValue planCode="Free" field="conn" />，基础版 <UserDbPlanValue planCode="Basic" field="conn" />，Serverless 最大 3000；应用请使用连接池并控制连接数。
 - Serverless 实例缩容至零后，首次连接可能需要数秒冷启动，请设置合理连接与查询超时。
 - 密码含特殊字符时，请按驱动要求转义（如 JDBC URL、DSN 中的 `@`、`:` 等）。
 - 生产环境建议将凭证存入密钥管理服务或 CI 环境变量，勿提交到代码仓库。

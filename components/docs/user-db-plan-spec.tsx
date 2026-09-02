@@ -19,11 +19,11 @@ function Unavailable({ label }: { label?: string }) {
 
 function freeStorageTip(mode: "pricing" | "limits"): string {
   return mode === "pricing"
-    ? "超出后锁定，升级开发版可自动解锁"
-    : "超出后锁定（可升级开发版自动解锁）";
+    ? "超出后锁定，升级基础版可自动解锁"
+    : "超出后锁定（可升级基础版自动解锁）";
 }
 
-function developerStorageTip(
+function paidStorageTip(
   plan: UserDbPlanItem,
   mode: "pricing" | "limits"
 ): string {
@@ -46,7 +46,7 @@ function buildRows(
   const isFree = plan.planCode === "Free";
   const storageValue = isFree
     ? `${storage}（${freeStorageTip(mode)}）`
-    : `${storage}（${developerStorageTip(plan, mode)}）`;
+    : `${storage}（${paidStorageTip(plan, mode)}）`;
 
   const rows: { label: string; value: string }[] = [
     {
@@ -176,14 +176,14 @@ export async function UserDbPlanValue({
 export async function UserDbStorageOverageSection() {
   const catalog = await fetchUserDbPlansCatalog();
   const free = findPlan(catalog?.plans, "Free");
-  const developer = findPlan(catalog?.plans, "Developer");
-  if (!free || !developer) {
+  const basic = findPlan(catalog?.plans, "Basic");
+  if (!free || !basic) {
     return <Unavailable />;
   }
 
   const freeStorage = formatStorageFromMb(free.limitSizeMb);
-  const devStorage = formatStorageFromMb(developer.limitSizeMb);
-  const overage = formatOveragePrice(developer.overagePricePerGibMonth);
+  const basicStorage = formatStorageFromMb(basic.limitSizeMb);
+  const overage = formatOveragePrice(basic.overagePricePerGibMonth);
 
   return (
     <>
@@ -204,13 +204,13 @@ export async function UserDbStorageOverageSection() {
               数据库进入 <strong>禁用（锁定）</strong> 状态，无法写入
             </td>
             <td>
-              清理数据使用量回落至额度内，或 <strong>升级至开发版</strong>{" "}
+              清理数据使用量回落至额度内，或 <strong>升级至基础版</strong>{" "}
               后自动解锁
             </td>
           </tr>
           <tr>
-            <td>{developer.displayName || "开发版"}</td>
-            <td>{devStorage}</td>
+            <td>{basic.displayName || "基础版"}</td>
+            <td>{basicStorage}</td>
             <td>
               超出部分按 <strong>{overage}</strong> 从钱包余额扣费
             </td>
@@ -230,8 +230,8 @@ export async function UserDbStorageOverageSection() {
           后，数据库状态变为禁用，连接与写入将受限。
         </li>
         <li>
-          升级至开发版（共享实例 → <strong>升级</strong>
-          ）并完成数据迁移后，系统会自动解锁，同时获得 {devStorage}{" "}
+          升级至基础版（共享实例 → <strong>升级</strong>
+          ）并完成数据迁移后，系统会自动解锁，同时获得 {basicStorage}{" "}
           基础额度与按量计费能力。
         </li>
         <li>
@@ -240,12 +240,12 @@ export async function UserDbStorageOverageSection() {
         </li>
       </ul>
       <p>
-        <strong>开发版按量计费说明：</strong>
+        <strong>基础版按量计费说明：</strong>
       </p>
       <ul>
-        <li>存储在 {devStorage} 以内不产生额外存储费用。</li>
+        <li>存储在 {basicStorage} 以内不产生额外存储费用。</li>
         <li>
-          超出 {devStorage} 的部分按 {overage}{" "}
+          超出 {basicStorage} 的部分按 {overage}{" "}
           计费，从账号钱包余额中扣除。
         </li>
         <li>
@@ -254,6 +254,9 @@ export async function UserDbStorageOverageSection() {
         </li>
         <li>可在详情页用量环图实时查看当前存储占用。</li>
       </ul>
+      <p className="text-sm text-muted-foreground">
+        原「开发版」用户可继续续费与使用；新购与免费版升级目标为基础版。
+      </p>
     </>
   );
 }

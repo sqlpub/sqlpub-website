@@ -86,7 +86,7 @@ function buildFreePlan(plan: UserDbPlanItem): Plan {
       { text: "共享实例", tip: "申请获得 1 个独立 schema" },
       {
         text: `${formatStorageFromMb(plan.limitSizeMb)} 存储空间`,
-        tip: "超出锁定，升级开发版自动解锁",
+        tip: "超出锁定，升级基础版自动解锁",
       },
       { text: `${plan.limitConnSize ?? "-"} 个连接` },
       { text: formatQueriesPerHour(plan.maxQueriesPerHour) },
@@ -95,10 +95,10 @@ function buildFreePlan(plan: UserDbPlanItem): Plan {
   };
 }
 
-function buildDeveloperPlan(plan: UserDbPlanItem): Plan {
+function buildBasicPlan(plan: UserDbPlanItem): Plan {
   const overageTip = formatOverageTip(plan.overagePricePerGibMonth);
   return {
-    name: plan.displayName || "开发版",
+    name: plan.displayName || "基础版",
     price: formatPriceYear(plan.priceYear),
     period: "/ 年",
     description: plan.description || "",
@@ -123,12 +123,12 @@ function buildDeveloperPlan(plan: UserDbPlanItem): Plan {
 export default async function PricingPage() {
   const catalog = await fetchUserDbPlansCatalog();
   const free = findPlan(catalog?.plans, "Free");
-  const developer = findPlan(catalog?.plans, "Developer");
-  const sharedUnavailable = !free || !developer;
+  const basic = findPlan(catalog?.plans, "Basic");
+  const sharedUnavailable = !free || !basic;
 
   const plans: Plan[] = [
     ...(free ? [buildFreePlan(free)] : []),
-    ...(developer ? [buildDeveloperPlan(developer)] : []),
+    ...(basic ? [buildBasicPlan(basic)] : []),
     serverlessPlan,
   ];
 

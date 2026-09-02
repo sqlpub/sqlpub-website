@@ -8,7 +8,7 @@ SQLPub 提供两种实例模式：
 
 | 模式 | 适用方案 | 说明 |
 | --- | --- | --- |
-| **共享实例** | 免费版、开发版 | 多个用户共用同一 MySQL 实例，每位用户申请获得的是独立的 **schema**（逻辑数据库），数据相互隔离 |
+| **共享实例** | 免费版、基础版 | 多个用户共用同一 MySQL 实例，每位用户申请获得的是独立的 **schema**（逻辑数据库），数据相互隔离 |
 | **独享实例** | Serverless 版 | 每位用户拥有独立的 MySQL 实例，可创建多个数据库，资源独享、弹性伸缩 |
 
 ### 免费版
@@ -17,11 +17,11 @@ SQLPub 提供两种实例模式：
 
 <UserDbPlanSpecTable planCode="Free" mode="pricing" />
 
-### 开发版
+### 基础版
 
-<strong><UserDbPlanPriceLabel planCode="Developer" /></strong> — 性价比之选，适合个人开发者长期使用。**共享实例**，申请获得 1 个 schema。
+<strong><UserDbPlanPriceLabel planCode="Basic" /></strong> — 性价比之选，适合个人开发者长期使用。**共享实例**，申请获得 1 个 schema。
 
-<UserDbPlanSpecTable planCode="Developer" mode="pricing" />
+<UserDbPlanSpecTable planCode="Basic" mode="pricing" />
 
 ### Serverless 版
 
@@ -49,14 +49,14 @@ SQLPub 提供两种实例模式：
 | 场景 | 推荐方案 |
 | --- | --- |
 | 学习、个人小项目 | 免费版（共享实例 + 1 个 schema） |
-| 长期运行的个人应用 | 开发版（共享实例 + 更高配额） |
+| 长期运行的个人应用 | 基础版（共享实例 + 更高配额） |
 | 需要独享资源、多数据库 | Serverless 版（独享实例） |
 | 流量波动大、需弹性伸缩 | Serverless 版（独享实例） |
 
 ### 升级与购买
 
 1. 登录 [SQLPub 控制台](https://console.sqlpub.com/user/login)。
-2. **开发版**：共享实例 → 创建，选择开发版并支付。
+2. **基础版**：共享实例 → 创建，选择基础版并支付。
 3. **免费版升级**：共享实例 → 升级，或访问 `/upgrade?dbId=...`。
 4. **Serverless 版**：Serverless 实例 → 创建。
 
