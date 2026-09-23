@@ -13,6 +13,13 @@ import {
   fetchUserDbPlansCatalog,
   type UserDbPlanItem,
 } from "@/lib/user-db-plans";
+import {
+  fetchServerlessPlansCatalog,
+  formatPlanNumber,
+  isTrafficCurrentlyFree,
+  pickDefaultServerlessPlan,
+  type ServerlessPlanItem,
+} from "@/lib/serverless-plans";
 import { cn } from "@/lib/utils";
 
 export const revalidate = 300;
@@ -40,39 +47,55 @@ type Plan = {
   meters?: Meter[];
 };
 
-const serverlessPlan: Plan = {
-  name: "Serverless 版",
-  price: "按量付费",
-  period: "",
-  description: "生产级弹性伸缩，用多少付多少",
-  cta: "去体验",
-  variant: "outline",
-  meters: [
-    {
-      label: "计算费用",
-      price: "0.045元 / CU / 小时",
-      note: "自动伸缩按秒计费",
-    },
-    {
-      label: "存储费用",
-      price: "0.5元 / GB / 月",
-      note: "按实际使用",
-    },
-    {
-      label: "流量费用",
-      price: "0.5元 / GB",
-      note: "50GB 免费/月，当前免费",
-    },
-  ],
-  features: [
-    { text: "独享实例", tip: "独立 MySQL 实例，无数据库个数限制" },
-    { text: "最大 3000 个连接" },
-    { text: "自动扩展至 2CU", tip: "2 个 vCPU，8 GB RAM" },
-    { text: "2 小时不使用自动缩放到 0" },
-    { text: "私有网络 / IP 限制", tip: "后续支持" },
-    { text: "99.9% SLA", tip: "服务等级协议" },
-  ],
-};
+function buildServerlessPlan(plan: ServerlessPlanItem): Plan {
+  const cu = formatPlanNumber(plan.pricePerCuHour);
+  const storage = formatPlanNumber(plan.pricePerGbMonth);
+  const traffic = formatPlanNumber(plan.pricePerGbTraffic);
+  const freeTraffic = formatPlanNumber(plan.freeTrafficGb);
+  const maxCu = formatPlanNumber(plan.maxCu);
+  const idleHours = formatPlanNumber(plan.idleScaleToZeroHours);
+  const maxConn = formatPlanNumber(plan.maxConnections);
+  const trafficNote = isTrafficCurrentlyFree(plan)
+    ? `${freeTraffic}GB 免费/月，当前免费`
+    : `${freeTraffic}GB 免费/月`;
+
+  return {
+    name: plan.displayName || "Serverless 版",
+    price: "按量付费",
+    period: "",
+    description: plan.description || "生产级弹性伸缩，用多少付多少",
+    cta: "去体验",
+    variant: "outline",
+    meters: [
+      {
+        label: "计算费用",
+        price: `${cu}元 / CU / 小时`,
+        note: "自动伸缩按秒计费",
+      },
+      {
+        label: "存储费用",
+        price: `${storage}元 / GB / 月`,
+        note: "按实际使用",
+      },
+      {
+        label: "流量费用",
+        price: `${traffic}元 / GB`,
+        note: trafficNote,
+      },
+    ],
+    features: [
+      { text: "独享实例", tip: "独立 MySQL 实例，无数据库个数限制" },
+      { text: `最大 ${maxConn} 个连接` },
+      {
+        text: `自动扩展至 ${maxCu}CU`,
+        tip: `${Number(maxCu)} 个 vCPU，${Number(maxCu) * 4} GB RAM`,
+      },
+      { text: `${idleHours} 小时不使用自动缩放到 0` },
+      { text: "私有网络 / IP 限制", tip: "后续支持" },
+      { text: "99.9% SLA", tip: "服务等级协议" },
+    ],
+  };
+}
 
 function buildFreePlan(plan: UserDbPlanItem): Plan {
   return {
@@ -122,14 +145,17 @@ function buildBasicPlan(plan: UserDbPlanItem): Plan {
 
 export default async function PricingPage() {
   const catalog = await fetchUserDbPlansCatalog();
+  const serverlessCatalog = await fetchServerlessPlansCatalog();
   const free = findPlan(catalog?.plans, "Free");
   const basic = findPlan(catalog?.plans, "Basic");
+  const serverless = pickDefaultServerlessPlan(serverlessCatalog);
   const sharedUnavailable = !free || !basic;
+  const serverlessUnavailable = !serverless;
 
   const plans: Plan[] = [
     ...(free ? [buildFreePlan(free)] : []),
     ...(basic ? [buildBasicPlan(basic)] : []),
-    serverlessPlan,
+    ...(serverless ? [buildServerlessPlan(serverless)] : []),
   ];
 
   return (
@@ -149,7 +175,12 @@ export default async function PricingPage() {
 
       {sharedUnavailable && (
         <p className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-center text-sm text-muted-foreground">
-          共享实例套餐信息暂时无法加载，请稍后刷新；Serverless 方案仍可查看。
+          共享实例套餐信息暂时无法加载，请稍后刷新。
+        </p>
+      )}
+      {serverlessUnavailable && (
+        <p className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-center text-sm text-muted-foreground">
+          Serverless 套餐信息暂时无法加载，请稍后刷新。
         </p>
       )}
 

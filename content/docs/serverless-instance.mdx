@@ -7,10 +7,10 @@ Serverless 版提供**独享 MySQL 实例**，在控制台 **Serverless 实例**
 1. 进入 **控制台 → Serverless 实例**。
 2. 点击 **创建**，填写实例名称与 MySQL 版本。
 3. 创建前会展示计费说明：
-   - 新用户 **免费试用 7 天**
-   - 计算：0.045 元 / CU / 小时（按秒计费）
-   - 存储：0.5 元 / GB / 月
-   - 流量：0.5 元 / GB（50GB 免费 / 月，当前免费）
+   - 新用户 **免费试用 <ServerlessPlanValue field="trialDays" /> 天**
+   - 计算：<ServerlessPlanValue field="cuPrice" />（按秒计费）
+   - 存储：<ServerlessPlanValue field="storagePrice" />
+   - 流量：<ServerlessPlanValue field="trafficPrice" />（<ServerlessPlanValue field="freeTraffic" /> 免费 / 月，当前免费）
 
 ### 列表操作
 

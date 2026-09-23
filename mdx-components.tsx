@@ -7,6 +7,10 @@ import {
   UserDbPlanValue,
   UserDbStorageOverageSection,
 } from "@/components/docs/user-db-plan-spec";
+import {
+  ServerlessPlanMeters,
+  ServerlessPlanValue,
+} from "@/components/docs/serverless-plan-spec";
 
 const components: MDXComponents = {
   UserDbPlanSpecTable,
@@ -14,6 +18,8 @@ const components: MDXComponents = {
   UserDbPlanPrice,
   UserDbPlanValue,
   UserDbStorageOverageSection,
+  ServerlessPlanMeters,
+  ServerlessPlanValue,
 };
 
 export function useMDXComponents(): MDXComponents {

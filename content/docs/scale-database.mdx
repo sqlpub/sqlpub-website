@@ -30,8 +30,9 @@ Serverless 实例存储支持自动扩容，容量按实际使用在详情页 **
 
 ### 计费说明
 
-- 计算：**0.045 元 / CU / 小时**，按秒计费
-- 存储：**0.5 元 / GB / 月**
+- 计算：**<ServerlessPlanValue field="cuPrice" />**，按秒计费
+- 存储：**<ServerlessPlanValue field="storagePrice" />**
+- 流量：**<ServerlessPlanValue field="trafficPrice" />**（<ServerlessPlanValue field="freeTraffic" /> 免费 / 月，当前免费）
 - 缩容至零后仅收取存储与流量费用
 
 详见[价格方案](/docs/pricing)与[账号与账单](/docs/account-billing)。
