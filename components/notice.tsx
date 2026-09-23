@@ -7,13 +7,21 @@ import { ChevronRight } from "lucide-react";
 const notices = [
   {
     id: 1,
-    text: "【风铃云】专业的云计算服务提供商，价格便宜实惠，欢迎大家体验。",
-    href: "https://www.aeoliancloud.com",
+    text: "【公告】Serverless 按量计费价格调整：计算 0.1 元/CU/小时，免费流量 10GB/月，详情点击查看",
+    href: "/blog/serverless-price-adjustment",
+    external: false,
   },
   {
     id: 2,
+    text: "【风铃云】专业的云计算服务提供商，价格便宜实惠，欢迎大家体验。",
+    href: "https://www.aeoliancloud.com",
+    external: true,
+  },
+  {
+    id: 3,
     text: "【察言观数】领先的企业级 AI 数据表格智能体平台，欢迎大家体验。",
     href: "https://www.asktable.com",
+    external: true,
   },
 ];
 
@@ -40,7 +48,6 @@ export const Notice = () => {
   return (
     <div className="relative w-full overflow-hidden border-b border-border bg-gradient-to-r from-primary/5 via-transparent to-primary/5">
       <div className="relative flex items-center justify-center py-2.5">
-        {/* Indicator dots */}
         {notices.length > 1 && (
           <div className="absolute left-4 flex items-center gap-1.5">
             {notices.map((_, index) => (
@@ -64,11 +71,11 @@ export const Notice = () => {
           </div>
         )}
 
-        {/* Notice content */}
         <Link
           href={currentNotice.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          {...(currentNotice.external
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
           className={`group flex items-center gap-2 px-12 text-center text-sm font-medium transition-all duration-300 ${
             isAnimating
               ? "translate-y-2 opacity-0"
@@ -81,7 +88,6 @@ export const Notice = () => {
           <ChevronRight className="h-4 w-4 text-pink-500 transition-transform group-hover:translate-x-1" />
         </Link>
 
-        {/* Counter */}
         {notices.length > 1 && (
           <div className="absolute right-4 text-xs text-muted-foreground">
             {currentIndex + 1} / {notices.length}

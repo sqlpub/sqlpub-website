@@ -9,6 +9,15 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "serverless-price-adjustment",
+    title: "Serverless 按量计费价格调整说明",
+    date: "2026-09-23",
+    description:
+      "计算单价调整为 0.1 元/CU/小时，免费流量调整为 10GB/月，流量标价调整为 0.7 元/GB；存储单价不变。",
+    category: "公告",
+    readTime: 4,
+  },
+  {
     slug: "system-status-page",
     title: "SQLPub 系统状态页上线：透明展示各服务可用性",
     date: "2026-07-11",
