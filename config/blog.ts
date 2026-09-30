@@ -9,6 +9,15 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "postgresql-shared-instance",
+    title: "PostgreSQL 共享实例上线：支持在线新购",
+    date: "2026-09-30",
+    description:
+      "SQLPub 现已支持 PostgreSQL 共享实例新购，基础版按年开通，可选中国与新加坡节点，控制台一站式管理。",
+    category: "公告",
+    readTime: 3,
+  },
+  {
     slug: "serverless-price-adjustment",
     title: "Serverless 按量计费价格调整说明",
     date: "2026-09-23",

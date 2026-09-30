@@ -7,18 +7,24 @@ import { ChevronRight } from "lucide-react";
 const notices = [
   {
     id: 1,
+    text: "【公告】PostgreSQL 共享实例上线，支持在线新购，详情点击查看",
+    href: "/blog/postgresql-shared-instance",
+    external: false,
+  },
+  {
+    id: 2,
     text: "【公告】Serverless 按量计费价格调整：计算 0.1 元/CU/小时，免费流量 10GB/月，详情点击查看",
     href: "/blog/serverless-price-adjustment",
     external: false,
   },
   {
-    id: 2,
+    id: 3,
     text: "【风铃云】专业的云计算服务提供商，价格便宜实惠，欢迎大家体验。",
     href: "https://www.aeoliancloud.com",
     external: true,
   },
   {
-    id: 3,
+    id: 4,
     text: "【察言观数】领先的企业级 AI 数据表格智能体平台，欢迎大家体验。",
     href: "https://www.asktable.com",
     external: true,
