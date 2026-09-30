@@ -17,12 +17,12 @@ const notices = [
     href: "/blog/serverless-price-adjustment",
     external: false,
   },
-  {
-    id: 3,
-    text: "【风铃云】专业的云计算服务提供商，价格便宜实惠，欢迎大家体验。",
-    href: "https://www.aeoliancloud.com",
-    external: true,
-  },
+  // {
+  //   id: 3,
+  //   text: "【风铃云】专业的云计算服务提供商，价格便宜实惠，欢迎大家体验。",
+  //   href: "https://www.aeoliancloud.com",
+  //   external: true,
+  // },
   {
     id: 4,
     text: "【察言观数】领先的企业级 AI 数据表格智能体平台，欢迎大家体验。",
